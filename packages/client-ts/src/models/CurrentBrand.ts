@@ -64,11 +64,11 @@ export interface CurrentBrand {
      */
     readonly brandingFaviconThemedUrls: ThemedUrls | null;
     /**
-     *
+     * Brands custom CSS, disabled when safe mode is enabled.
      * @type {string}
      * @memberof CurrentBrand
      */
-    brandingCustomCss: string;
+    readonly brandingCustomCss: string;
     /**
      *
      * @type {Array<FooterLink>}
@@ -198,6 +198,7 @@ export function CurrentBrandToJSONTyped(
         CurrentBrand,
         | "branding_logo_themed_urls"
         | "branding_favicon_themed_urls"
+        | "branding_custom_css"
         | "ui_footer_links"
         | "ui_theme"
         | "default_locale"
@@ -213,7 +214,6 @@ export function CurrentBrandToJSONTyped(
         branding_title: value["brandingTitle"],
         branding_logo: value["brandingLogo"],
         branding_favicon: value["brandingFavicon"],
-        branding_custom_css: value["brandingCustomCss"],
         flow_authentication: value["flowAuthentication"],
         flow_invalidation: value["flowInvalidation"],
         flow_recovery: value["flowRecovery"],

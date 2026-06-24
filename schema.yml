@@ -37173,6 +37173,8 @@ components:
           nullable: true
         branding_custom_css:
           type: string
+          description: Brands custom CSS, disabled when safe mode is enabled.
+          readOnly: true
         ui_footer_links:
           type: array
           items:

@@ -100,7 +100,7 @@ class CurrentBrandSerializer(PassiveSerializer):
     branding_logo_themed_urls = ThemedUrlsSerializer(read_only=True, allow_null=True)
     branding_favicon = CharField(source="branding_favicon_url")
     branding_favicon_themed_urls = ThemedUrlsSerializer(read_only=True, allow_null=True)
-    branding_custom_css = CharField()
+    branding_custom_css = SerializerMethodField()
     ui_footer_links = ListField(
         child=FooterLinkSerializer(),
         read_only=True,
@@ -131,14 +131,13 @@ class CurrentBrandSerializer(PassiveSerializer):
             values[flag().key] = flag.get()
         return values
 
-    def to_representation(self, instance: Brand) -> dict[str, Any]:
-        data = super().to_representation(instance)
-        # Suppress custom CSS for safe-mode sessions (e.g. recovery links) so that
+    def get_branding_custom_css(self, instance: Brand) -> str:
+        """Brands custom CSS, disabled when safe mode is enabled."""
         # misconfigured branding cannot prevent a user from reaching the UI to fix it.
         request = self.context.get("request")
         if request is not None and session_safe_mode(request):
-            data["branding_custom_css"] = ""
-        return data
+            return ""
+        return instance.branding_custom_css
 
 
 class BrandViewSet(UsedByMixin, ModelViewSet):
